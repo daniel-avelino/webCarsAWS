@@ -1,0 +1,5 @@
+package com.webCars.entities;
+
+public class User {
+
+}

@@ -1,0 +1,43 @@
+package com.webCars.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.amazonaws.services.dynamodbv2.model.Select;
+import com.webCars.entities.User;
+
+@Service
+public class UserService {
+
+	@Autowired
+	private DynamoDBMapper dynamoDBmapper;
+
+	@Autowired
+	private BCryptPasswordEncoder encoder;
+
+
+	public void save(User user) {
+		user.setPassword(encoder.encode(user.getPassword()));
+		dynamoDBmapper.save(user);
+	}
+
+	public List<User> findAll() {
+		List<User> users = dynamoDBmapper.scan(User.class, new DynamoDBScanExpression());
+		return users;
+	}
+
+	public User findByName(String email) {
+		DynamoDBScanExpression scan = new DynamoDBScanExpression();
+		Condition verifica = new Condition();
+		verifica.withComparisonOperator("S:email");
+		scan.withSelect(Select.ALL_ATTRIBUTES).addFilterCondition("email", verifica);;
+		User user = dynamoDBmapper.scan(User.class, scan).get(0);
+		return user;
+	}
+}

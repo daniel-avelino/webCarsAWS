@@ -1,0 +1,5 @@
+package com.webCars.repositories;
+
+public class UserRepository {
+
+}
