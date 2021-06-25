@@ -1,6 +1,0 @@
-package com.webCars.repositories;
-
-@EnableScan
-public interface UserRepository {
-
-}

@@ -1,6 +1,0 @@
-package com.webCars.configuration;
-
-@Configuration
-public class Configuration {
-
-}
